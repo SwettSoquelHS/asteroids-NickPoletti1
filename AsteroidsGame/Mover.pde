@@ -67,7 +67,7 @@ interface Movable {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  Abstract base class Mover 
  */
-abstract class Mover {// implements Movable {
+abstract class Mover implements Movable {
 
   protected float x, y;
   protected float speed;
@@ -77,17 +77,17 @@ abstract class Mover {// implements Movable {
 
   /*
     Default Mover, not actually moving and directionless
-  */
+   */
   Mover(float x, float y) {
     //The line below shows how we can 
     //link this constructor to the constructor below through "this"
-    this(x, y, 0, 0);  
+    this(x, y, 0, 0);
   }
 
   /*
     Mover constructor specifying x, y position along with its speed and
-    direction (in degrees)
-  */
+   direction (in degrees)
+   */
   Mover(float x, float y, float speed, float direction) {
     this.x = x;
     this.y = y;
@@ -103,17 +103,27 @@ abstract class Mover {// implements Movable {
   void update() {
     x = x + speed*(float)Math.cos(radians(direction));
     y = y + speed*(float)Math.sin(radians(direction));
+    if(x > 645){
+      x = 2;
+    }
+    if(x < 0){
+      x = 640;
+    }
+    if(y > 405){
+      y = 2;
+    }
+    if(y < 0){
+      y = 405;
+    }
 
-    //todo: You need to decide what to do when X is less than 0 or greater than width
-    //todo: You need to decide what to do when Y is less than 0 or greater than height
   }
 
 
 
   /*
     Save this for your subclasses to override.
-    but notice how it is tagged with abstract, meaning 
-    it is incomplete. (It's like an I.O.U.)
+   but notice how it is tagged with abstract, meaning 
+   it is incomplete. (It's like an I.O.U.)
    */
   abstract void show();
 
@@ -121,9 +131,37 @@ abstract class Mover {// implements Movable {
   /*
     TODO: Part 4: Implement collision detection
    */
-  boolean collidingWith(Movable object){
-     return false; 
+  boolean collidingWith(Movable object) {
+    float distance = dist(x, y , object.getX(), object.getY());
+    boolean touching = distance < (radius + object.getRadius());
+    return touching;
   }
-  
-  //TODO: Part I: implement the methods of Moveable interface - delete this comment
+
+  float getX() {
+    return x;
+  }
+
+  float getY() {
+    return y;
+  }
+
+  float getDirection() {
+    return direction;
+  }
+
+  float getSpeed() {
+    return speed;
+  }
+
+  float getRadius() {
+    return radius;
+  }
+
+  void setDirection(float newDirectionInDegrees) {
+    direction = newDirectionInDegrees;
+  }
+
+  void setSpeed(float newSpeed){
+    speed = newSpeed;
+  }
 }
